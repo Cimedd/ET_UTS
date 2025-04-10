@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:imatching/home.dart';
+import 'package:imatching/login.dart';
+import 'package:imatching/userController.dart' as userController;
 
 void main() {
-  runApp(const MainApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  userController.checkUser().then((String result) {
+    if (result == '') {
+      runApp(MyLogin());
+    } else {
+      runApp(MainApp());
+    }
+  });
 }
 
 class MainApp extends StatelessWidget {
@@ -9,12 +19,8 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return  MaterialApp(
+      home: MyHomePage(),
     );
   }
 }
