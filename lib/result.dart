@@ -37,6 +37,7 @@ class _Result extends State<Result> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            
             SizedBox(height: 180,),
             Text("Score", style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),),
             SizedBox(height: 4,),

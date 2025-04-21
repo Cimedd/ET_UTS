@@ -39,6 +39,7 @@ class Home extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue.shade200,
       drawer: Drawer(
         child: Column(
           children: [
@@ -74,7 +75,8 @@ class Home extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Imatching"),
       ),
-      body: Center(
+      body: Padding(padding: EdgeInsets.symmetric(horizontal: 24), 
+      child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,7 +91,9 @@ class Home extends State<MyHomePage> {
             SizedBox(height: 4,),
             Text("3. Match all card within the time to win!",  style: TextStyle(fontSize: 16),),
             SizedBox(height: 12),
-            ElevatedButton(
+            Container(
+              width: 300,
+              child:   ElevatedButton(
               onPressed: () {
                 Navigator.push(
                   context,
@@ -100,9 +104,10 @@ class Home extends State<MyHomePage> {
               },
               child: Text("Play"),
             ),
+            ) 
           ],
         ),
-      ),
+      ),) 
     );
   }
 }

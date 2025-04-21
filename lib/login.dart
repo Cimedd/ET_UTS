@@ -113,43 +113,5 @@ class _LoginState extends State<Login> {
         ),
       ),
     );
-    // return Scaffold(
-    //   appBar: AppBar(title: Text('Login')),
-    //   body: Center(
-    //     child: Column(
-    //       children: [
-    //         TextField(
-    //           controller: _usernamecontroller,
-    //           decoration: InputDecoration(labelText: "Username"),
-    //           onSubmitted: (v) {
-    //             setState(() {});
-    //           },
-    //         ),
-    //         TextField(
-    //           controller: _passwordcontroller,
-    //           decoration: InputDecoration(labelText: "Password"),
-    //           onSubmitted: (v) {
-    //             setState(() {});
-    //           },
-    //         ),
-    //         ElevatedButton(
-    //           onPressed: () {
-    //             if (_usernamecontroller.text.trim().isEmpty) {
-    //               ScaffoldMessenger.of(context).showSnackBar(
-    //                 SnackBar(
-    //                   content: Text("Please enter your username"),
-    //                   duration: Duration(seconds: 2),
-    //                 ),
-    //               );
-    //             } else {
-    //               doLogin();
-    //             }
-    //           },
-    //           child: const Text("Login"),
-    //         ),
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 }

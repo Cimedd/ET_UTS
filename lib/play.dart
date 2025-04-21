@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:imatching/result.dart';
 import 'dart:async';
@@ -182,14 +184,16 @@ class _PlayState extends State<Play> {
 
   void CheckWin() async {
     if (match == (levelList[level - 1].cardNumber / 2)) {
-      setState(() {
+      setState(() async {
         if (level == 3) {
           endGame("You Won!");
         } else {
+          _timer.cancel();
+          await Future.delayed(Duration(seconds: 2));
+
           level += 1;
           match = 0;
           ShuffleCard();
-          _timer.cancel();
           startTimer();
         }
       });
@@ -220,15 +224,21 @@ class _PlayState extends State<Play> {
                   SizedBox(width: 8),
                   BgText("Level $level"),
                   SizedBox(width: 20),
-                  Text("Score :$score", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+                  Text(
+                    "Score :$score",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  ),
                 ],
               ),
             ),
             LinearPercentIndicator(
-              center: Text(formatTime(timeCount), style: TextStyle(color: Colors.white),),
+              center: Text(
+                formatTime(timeCount),
+                style: TextStyle(color: Colors.white),
+              ),
               width: MediaQuery.of(context).size.width,
               lineHeight: 20.0,
-              percent: (timeCount / levelList[level-1].time),
+              percent: (timeCount / levelList[level - 1].time),
               backgroundColor: Colors.grey,
               progressColor: Colors.blue,
             ),
@@ -248,18 +258,48 @@ class _PlayState extends State<Play> {
                         width: 100,
                         child: AnimatedSwitcher(
                           duration: Duration(seconds: 1),
+                          transitionBuilder: (
+                            Widget child,
+                            Animation<double> animation,
+                          ) {
+                            final rotateAnim = Tween(
+                              begin: pi,
+                              end: 0.0,
+                            ).animate(animation);
+
+                            return AnimatedBuilder(
+                              animation: rotateAnim,
+                              child: child,
+                              builder: (context, child) {
+                                final isUnder =
+                                    (ValueKey(card.isOpen) != child!.key);
+                                var tilt = (animation.value - 0.5).abs() - 0.5;
+                                tilt *= isUnder ? -0.003 : 0.003;
+
+                                return Transform(
+                                  transform: Matrix4.rotationY(rotateAnim.value)
+                                    ..setEntry(3, 0, tilt),
+                                  alignment: Alignment.center,
+                                  child: child,
+                                );
+                              },
+                            );
+                          },
                           child:
                               card.isOpen
                                   ? Card(
-                                    key: ValueKey("open_$index"),
+                                    key: ValueKey(true),
                                     child: InkWell(
                                       child: SizedBox.expand(
                                         child: Column(
                                           children: [
-                                            Center(
-                                              child: Image.asset(
-                                                "assets/images/${card.image}",
-                                                fit: BoxFit.contain,
+                                            Padding(
+                                              padding: EdgeInsets.all(10),
+                                              child: Center(
+                                                child: Image.asset(
+                                                  "assets/images/${card.image}",
+                                                  fit: BoxFit.contain,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -270,7 +310,7 @@ class _PlayState extends State<Play> {
                                   )
                                   : Card(
                                     key: ValueKey(
-                                      "closed_$index",
+                                      false,
                                     ), // ✅ Different key
                                     child: InkWell(
                                       onTap: () {
@@ -281,11 +321,35 @@ class _PlayState extends State<Play> {
                                           }
                                         });
                                       },
-                                      child: SizedBox.expand(
-                                        child: Column(
-                                          children: [
-                                            
-                                          ],
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          gradient: LinearGradient(
+                                            colors: [
+                                              Colors.blue.shade400,
+                                              Colors.purple.shade400,
+                                            ],
+                                            begin: Alignment.topLeft,
+                                            end: Alignment.bottomRight,
+                                          ),
+                                          borderRadius: BorderRadius.circular(
+                                            8,
+                                          ),
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(
+                                            4.0,
+                                          ), 
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              border: Border.all(
+                                                color: Colors.white,
+                                                width: 2,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -326,12 +390,11 @@ class Level {
 
 Container BgText(String text) {
   return Container(
-   
     padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(8),
-     color: Colors.blueAccent,
-  ),
+      borderRadius: BorderRadius.circular(8),
+      color: Colors.blueAccent,
+    ),
     child: Text(text, style: TextStyle(color: Colors.white)),
   );
 }
