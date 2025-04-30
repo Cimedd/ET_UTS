@@ -1,5 +1,5 @@
 import 'dart:math';
-
+import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:imatching/result.dart';
 import 'dart:async';
@@ -393,8 +393,14 @@ Container BgText(String text) {
     padding: EdgeInsets.all(8),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(8),
-      color: Colors.blueAccent,
+      color: Colors.deepPurple.shade800,
     ),
-    child: Text(text, style: TextStyle(color: Colors.white)),
+    child: Text(
+      text,
+      style: GoogleFonts.pressStart2p(
+        fontSize: 10,
+        color: Colors.white,
+      ),
+    ),
   );
 }

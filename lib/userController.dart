@@ -12,10 +12,10 @@ Future<void> saveUser(String user) async {
   prefs.setString("user_id", user);
 }
 
- Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    prefs.remove("user_id");
- }
+Future<void> logout() async {
+  final prefs = await SharedPreferences.getInstance();
+  prefs.remove("user_id");
+}
 
 Future<void> saveScore(Map<String, dynamic> newScore) async {
   final prefs = await SharedPreferences.getInstance();

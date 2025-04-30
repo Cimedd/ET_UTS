@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:imatching/home.dart';
 import 'package:imatching/main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:imatching/userController.dart' as userController;
 
 class MyLogin extends StatelessWidget {
@@ -8,8 +8,16 @@ class MyLogin extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'IMatching',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: Login(),
+      theme: ThemeData(
+        scaffoldBackgroundColor: Colors.deepPurple.shade200,
+        fontFamily: 'PressStart2P',
+        textTheme: Theme.of(context).textTheme.apply(
+              bodyColor: Colors.white,
+              displayColor: Colors.white,
+            ),
+      ),
+      home: const Login(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
@@ -18,98 +26,89 @@ class Login extends StatefulWidget {
   const Login({super.key});
 
   @override
-  State<StatefulWidget> createState() {
-    return _LoginState();
-  }
+  State<Login> createState() => _LoginState();
 }
 
 class _LoginState extends State<Login> {
-  final TextEditingController _usernamecontroller = TextEditingController();
-  final TextEditingController _passwordcontroller = TextEditingController();
-  @override
-  void initState() {
-    super.initState();
-    _usernamecontroller.text = "";
-    _passwordcontroller.text = "";
-  }
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
 
   void doLogin() async {
-    userController.saveUser(_usernamecontroller.text);
+    userController.saveUser(_usernameController.text);
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => MainApp()),
       (route) => false,
     );
-    ;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
-      body: Container(
-        height: 300,
-        margin: EdgeInsets.all(20),
-        padding: EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-          border: Border.all(width: 1),
-          color: Colors.blue,
-          boxShadow: [BoxShadow(blurRadius: 5)],
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                onChanged: (v) {
-                },
-                controller: _usernamecontroller,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Username',
-                  hintText: 'Username',
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Text(
+                  "IMATCHING",
+                  style: GoogleFonts.pressStart2p(fontSize: 18, color: Colors.white)
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: TextField(
-                controller: _passwordcontroller,
-                obscureText: true,
-                decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Password',
-                  hintText: 'Password',
+                const SizedBox(height: 24),
+                TextField(
+                  controller: _usernameController,
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.deepPurple.shade400,
+                    border: OutlineInputBorder(),
+                    labelText: 'USERNAME',
+                    labelStyle: GoogleFonts.pressStart2p(fontSize: 18, color: Colors.white),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.all(10),
-              child: Container(
-                height: 50,
-                width: 300,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  style: TextStyle(color: Colors.white, fontSize: 12),
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.deepPurple.shade400,
+                    border: OutlineInputBorder(),
+                    labelText: 'PASSWORD',
+                    labelStyle: GoogleFonts.pressStart2p(fontSize: 18, color: Colors.white),
+                  ),
                 ),
-                child: ElevatedButton(
-                  onPressed: () {
-                     if (_usernamecontroller.text.trim().isEmpty) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text("Please enter your username"),
-                      duration: Duration(seconds: 2),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.purple.shade800,
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                     ),
-                  );
-                } else {
-                  doLogin();
-                }
-                  },
-                  child: Text('Login', style: TextStyle(fontSize: 25)),
+                    onPressed: () {
+                      if (_usernameController.text.trim().isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("Please enter your username"),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
+                      } else {
+                        doLogin();
+                      }
+                    },
+                    child: Text(
+                      'LOGIN',
+                      style: TextStyle(fontSize: 12),
+                    ),
+                  ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );

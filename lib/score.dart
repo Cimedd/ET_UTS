@@ -1,60 +1,71 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:imatching/userController.dart' as userController;
 
 class Score extends StatelessWidget {
-
   Score({super.key});
-  final List<Color> colors = [Colors.amber, Colors.grey , Colors.brown];
-  final List<IconData> rankIcon = [Icons.looks_one_outlined, Icons.looks_two_outlined, Icons.looks_3_outlined];
+
+  final List<Color> colors = [Colors.amber, Colors.grey, Colors.brown];
+  final List<String> medals = ['🥇', '🥈', '🥉'];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text("High Scores"),),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          FutureBuilder<List<Map<String, dynamic>>>(
-            future: userController.getScores(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return const Text('Something went wrong!');
-              } else {
-                final scores = snapshot.data!;
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: List.generate(scores.length, (index) {
-                    var item = scores[index];
-                    return scoreCard(
-                      item['username'],
-                      item['score'],
-                      index
-                    );
-                  }),
+      backgroundColor: Colors.deepPurple.shade900,
+      appBar: AppBar(
+        backgroundColor: Colors.deepPurple.shade700,
+        title: Text(
+          "🏆 High Scores",
+          style: GoogleFonts.pressStart2p(fontSize: 14),
+        ),
+        centerTitle: true,
+        elevation: 0,
+      ),
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: userController.getScores(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator(color: Colors.white));
+          } else if (snapshot.hasError) {
+            return const Center(child: Text('Something went wrong!', style: TextStyle(color: Colors.white)));
+          } else {
+            final scores = snapshot.data!;
+            return ListView.builder(
+              padding: const EdgeInsets.all(16),
+              itemCount: scores.length,
+              itemBuilder: (context, index) {
+                var item = scores[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: scoreCard(item['username'], item['score'], index),
                 );
-              }
-            },
-          ),
-        ],
+              },
+            );
+          }
+        },
       ),
     );
   }
 
-  Row scoreCard(String username, int score, int index) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Icon(rankIcon[index], color: colors[index]),
-        SizedBox(width: 20,),
-        Text(username, style: TextStyle(fontSize: 24),),
-        SizedBox(width: 12,),
-        Text(score.toString(), style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-      ],
+  Widget scoreCard(String username, int score, int index) {
+    return Card(
+      elevation: 10,
+      color: Colors.deepPurple.shade600,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: ListTile(
+        leading: Text(
+          index < 3 ? medals[index] : '${index + 1}.',
+          style: TextStyle(fontSize: 28),
+        ),
+        title: Text(
+          username,
+          style: GoogleFonts.pressStart2p(fontSize: 12, color: Colors.white),
+        ),
+        trailing: Text(
+          score.toString(),
+          style: GoogleFonts.pressStart2p(fontSize: 12, color: Colors.amberAccent),
+        ),
+      ),
     );
   }
 }
