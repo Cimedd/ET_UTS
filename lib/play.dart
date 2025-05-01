@@ -67,8 +67,6 @@ class _PlayState extends State<Play> {
     });
   }
 
-  void StartUp() {}
-
   void endGame(String endText) {
     _timer.cancel();
     showDialog<String>(
@@ -111,7 +109,6 @@ class _PlayState extends State<Play> {
   void ShuffleCard() {
     setState(() {
       playcardList = [];
-
       playcardList =
           cardList
               .take((levelList[level - 1].cardNumber / 2).toInt())
@@ -157,7 +154,6 @@ class _PlayState extends State<Play> {
       });
     }
 
-    // Reset state outside of matching logic
     setState(() {
       value1 = "";
       value2 = "";
@@ -210,23 +206,37 @@ class _PlayState extends State<Play> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.deepPurple.shade800,
       body: SafeArea(
         child: Column(
           children: [
             Container(
               padding: EdgeInsets.all(8),
-              color: Colors.cyan,
-              child: Row(
+              color: Colors.deepPurple.shade200,
+              child: Column(
+                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BgText("Mistakes :$mistakes"),
-                  SizedBox(width: 8),
-                  BgText("Moves :$moves"),
-                  SizedBox(width: 8),
-                  BgText("Level $level"),
-                  SizedBox(width: 20),
-                  Text(
-                    "Score :$score",
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  Row(
+                    children: [
+                      BgText("Mistakes :$mistakes"),
+                      SizedBox(width: 8),
+                      BgText("Moves :$moves"),
+                      SizedBox(width: 8),
+                      BgText("Level $level"),
+                      SizedBox(width: 8),
+                    ],
+                  ),
+                  SizedBox(height: 8,),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Colors.deepPurple.shade800,
+                    ),
+                    child: Text(
+                      "Score :$score",
+                      style: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.white),
+                    ),
                   ),
                 ],
               ),
@@ -234,13 +244,13 @@ class _PlayState extends State<Play> {
             LinearPercentIndicator(
               center: Text(
                 formatTime(timeCount),
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(color: Colors.black),
               ),
               width: MediaQuery.of(context).size.width,
               lineHeight: 20.0,
               percent: (timeCount / levelList[level - 1].time),
-              backgroundColor: Colors.grey,
-              progressColor: Colors.blue,
+              backgroundColor: Colors.purple[50],
+              progressColor: Colors.deepPurple.shade100,
             ),
             Expanded(
               child: GridView.count(
@@ -309,9 +319,7 @@ class _PlayState extends State<Play> {
                                     ),
                                   )
                                   : Card(
-                                    key: ValueKey(
-                                      false,
-                                    ), // ✅ Different key
+                                    key: ValueKey(false), // ✅ Different key
                                     child: InkWell(
                                       onTap: () {
                                         setState(() {
@@ -336,9 +344,7 @@ class _PlayState extends State<Play> {
                                           ),
                                         ),
                                         child: Padding(
-                                          padding: const EdgeInsets.all(
-                                            4.0,
-                                          ), 
+                                          padding: const EdgeInsets.all(4.0),
                                           child: Container(
                                             decoration: BoxDecoration(
                                               color: Colors.white,
@@ -397,10 +403,7 @@ Container BgText(String text) {
     ),
     child: Text(
       text,
-      style: GoogleFonts.pressStart2p(
-        fontSize: 10,
-        color: Colors.white,
-      ),
+      style: GoogleFonts.pressStart2p(fontSize: 10, color: Colors.white),
     ),
   );
 }
